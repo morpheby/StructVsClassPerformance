@@ -1,27 +1,19 @@
 # Struct vs Class Performance
 
-This is a POC for my Medium article [Stop Using Structs!!](https://medium.com/commencis/stop-using-structs-e1be9a86376f) which compares performance characteristics of structs and classes, with a view to show where structs are misused and contain other reference types.
+This is a POC for the [response](https://medium.com/@MorpheBY/a-perfectly-fine-point-but-i-have-to-disagree-with-your-arguments-on-it-a7602ab1a3fb) to Gokhan Topcu's Medium article [Stop Using Structs!!](https://medium.com/commencis/stop-using-structs-e1be9a86376f).
 
-## Results
-
-I tested each configuration with 100 iterations, results are averages in milliseconds, smaller is better :)
-
-| Optimization Level   | Class           | Struct  | Ratio|
-| -------------- |:-------------:| :-----:|-----:|
-| -Onone (unoptimized)          | 47926 | 89411 | ~1.86x    |
-| -O (single file optimization) | 5981  | 16503 | ~2.76x    |
-| -O -whole-module-optimization | 372   | 24809 | ~67x      |
+It is designed to prove that "struct vs class" is a much more complex problem with regard to
+performance.
 
 ## Requirements
 
 - Xcode 9.0+
-- Swift 4.0+
+- Swift 4.1+
 
 ## Running
 
 ```bash
-xcrun -sdk macosx swiftc -O -whole-module-optimization StructvsClassPerformance.swift
-./StructvsClassPerformance
+./compile.sh
 ```
 
 ## License

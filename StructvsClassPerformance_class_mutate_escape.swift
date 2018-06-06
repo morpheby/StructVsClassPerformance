@@ -2,6 +2,7 @@
 //  StructvsClassPerformance.swift
 //
 //  MIT License
+//  Copyright (c) 2018 Ilya Mikhaltsou
 //  Copyright (c) 2018 Gokhan Topcu
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -150,6 +151,7 @@ func simpleCalculationForStruct(_ testStruct: ContainerStruct) -> Int
     return (testStruct.dummy3.count ^ 0x9e3779b9) >> testStruct.dummy9.count
 }
 
+var escapedClassCopy: ContainerClass?
 
 /// Function to test class performance
 @inline(never)
@@ -176,8 +178,9 @@ func calculateClassPerformance(with dummies: ContiguousArray<DummyClass>, iterat
     {
         // Create a copy of instance then pass it to the function
         // to create new pointers to the original instance
-        let copy = container
-        result += testClass(copy)
+        escapedClassCopy = container
+        result += testClass(escapedClassCopy!)
+        swap(&container.dummy2, &container.dummy3)
     }
 
     let endTime = MachTimeUtils.now()
@@ -187,11 +190,13 @@ func calculateClassPerformance(with dummies: ContiguousArray<DummyClass>, iterat
     print("Result: \(result)")
 }
 
+var escapedStructCopy: ContainerStruct?
+
 @inline(never)
 func calculateStructPerformance(with dummies: ContiguousArray<DummyClass>, iterations: Int64)
 {
     // Create an instance of struct that contains multiple classes
-    let container = ContainerStruct(
+    var container = ContainerStruct(
         dummy0: dummies[0],
         dummy1: dummies[1],
         dummy2: dummies[2],
@@ -211,8 +216,9 @@ func calculateStructPerformance(with dummies: ContiguousArray<DummyClass>, itera
     {
         // Create a copy of instance then pass it to the function
         // to create new copies of the original instance
-        let copy = container
-        result += testStruct(copy)
+        escapedStructCopy = container
+        result += testStruct(escapedStructCopy!)
+        swap(&container.dummy2, &container.dummy3)
     }
 
     let endTime = MachTimeUtils.now()
